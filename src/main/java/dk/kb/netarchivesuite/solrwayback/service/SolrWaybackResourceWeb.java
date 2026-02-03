@@ -583,6 +583,29 @@ public class SolrWaybackResourceWeb {
 
     }
     
+    @GET
+    @Path("/tools/domainurls")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<String> getDomainUrls(@QueryParam("domain") String domain, @QueryParam("maxUrls") Integer maxUrls) throws SolrWaybackServiceException {
+      try{
+        if (domain == null || domain.trim().isEmpty()) {
+          throw new InvalidArgumentServiceException("Domain parameter is required");
+        }
+        
+        int limit = 1000; // Default
+        if (maxUrls != null && maxUrls > 0) {
+          limit = Math.min(maxUrls, 10000); // Cap at 10000 to prevent performance issues
+        }
+        
+        log.debug("Getting URLs for domain: {} with limit: {}", domain, limit);
+        List<String> urls = NetarchiveSolrClient.getInstance().getSnapshotsForDomain(domain, limit);
+        log.info("Returning {} URLs for domain: {}", urls.size(), domain);
+        return urls;
+        
+      } catch (Exception e) {
+        throw handleServiceExceptions(e);
+      }
+    }
 
     @GET
     @Path("/images/logo")

@@ -27,6 +27,9 @@
         <button :class="currentTool === 'ngramnetarchive' ? 'activeTool' : ''" @click="setCurrentTool('ngramnetarchive')">
           Ngram Netarchive 
         </button>
+        <button :class="currentTool === 'domainvisit' ? 'activeTool' : ''" @click="setCurrentTool('domainvisit')">
+          Domain Visit Visualization
+        </button>
         <hr>
       </div>
       <wordcloud v-if="currentTool === 'wordcloud'" />
@@ -34,6 +37,7 @@
       <domain-stats v-if="currentTool === 'domainstats'" />
       <gephi-export v-if="currentTool === 'gephiexport'" />
       <ngram-netarchive v-if="currentTool === 'ngramnetarchive'" />
+      <domain-visit-visualization v-if="currentTool === 'domainvisit'" />
     </div>
   </div>
 </template>
@@ -44,6 +48,7 @@ import LinkGraph from './ToolboxComponents/LinkGraph.vue'
 import DomainStats from './ToolboxComponents/DomainStats.vue'
 import GephiExport from './ToolboxComponents/GephiExport.vue'
 import NgramNetarchive from './ToolboxComponents/NgramNetarchive.vue'
+import DomainVisitVisualization from './ToolboxComponents/DomainVisitVisualization.vue'
 
 
 export default {
@@ -53,7 +58,8 @@ export default {
     LinkGraph, 
     DomainStats,
     GephiExport,
-    NgramNetarchive
+    NgramNetarchive,
+    DomainVisitVisualization
    
   },
   data() {

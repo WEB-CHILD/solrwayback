@@ -973,7 +973,7 @@ public class NetarchiveSolrClient {
     /**
      * Perform searches for all given URLs, deduplicating on {@code url_norm} and prioritizing those closest to the
      * given timestamp.
-     * <p> 
+     * <p>
      * This implementation performs a full resolve of all URLs before delivery, which delays the time before first
      * delivered {@code Solrdocument} and introduces a memory overhead: This method should only be called for a limited
      * amount of URLs, such as 1000-10,000.
@@ -1143,7 +1143,7 @@ public class NetarchiveSolrClient {
 
         String urlNormQuery = UrlUtils.fixLegacyNormaliseUrlErrorQuery(url);
 
-        String query = urlNormQuery +" AND status_code:200"; //Maybe also allow 400 and 404?: (status_code:200 OR status_code:400 OR status_code:404).          
+        String query = urlNormQuery +" AND status_code:200"; //Maybe also allow 400 and 404?: (status_code:200 OR status_code:400 OR status_code:404).
 
         SolrQuery solrQuery = new SolrQuery();
         solrQuery.setQuery(query);
@@ -1812,5 +1812,54 @@ public class NetarchiveSolrClient {
      */
     public long getLenientSuccesses() {
         return lenientSuccesses.get();
+    }
+
+    /**
+     * Get list of snapshots for a given domain.
+     * @param domain the domain to search for (e.g., "test.com")
+     * @param maxUrls maximum number of URLs to return
+     * @return list of URLs for the domain
+     * @throws Exception if the query fails
+     */
+    public List<String> getSnapshotsForDomain(String domain, int maxUrls) throws Exception {
+        Set<String> urlSet = new LinkedHashSet<>(); // Use LinkedHashSet to maintain order and uniqueness
+
+        String searchString = "domain:\"" + domain + "\" AND status_code:200 AND (content_type_norm:html OR content_type_norm:document OR content_type_norm:text)";
+        SolrQuery solrQuery = new SolrQuery();
+        solrQuery.setQuery(searchString);
+        solrQuery.setRows(Math.min(maxUrls * 2, 10000)); // Query more rows to account for duplicates
+        solrQuery.add("fl", "url", "wayback_date"); // Request the url field
+        solrQuery.set("facet", "false"); // Disable facets for performance
+        solrQuery.setSort("crawl_date", SolrQuery.ORDER.asc); // Sort by crawl_date descending
+
+        log.debug("Querying Solr for domain: {} with query: {}", domain, searchString);
+
+        QueryResponse response = solrServer.query(solrQuery);
+        SolrDocumentList docs = response.getResults();
+
+        // Collect unique URLs
+        for (SolrDocument doc : docs) {
+            String url = doc.getFieldValue("url").toString();
+            String waybackDate = doc.getFieldValue("wayback_date").toString();
+            StringBuilder snapshotUrl = new StringBuilder();
+            String snapshot = snapshotUrl.append(waybackDate).append("/").append(url).toString();
+
+
+            if (url != null) {
+                boolean newEntry = urlSet.add(snapshot);
+
+                if (!newEntry){
+                   log.warn("Duplicate URL found for domain {}: {}", domain, snapshot);
+                }
+
+                if (urlSet.size() >= maxUrls) {
+                    break; // Stop once we have enough unique URLs
+                }
+            }
+        }
+
+        List<String> urls = new ArrayList<>(urlSet);
+        log.info("Found {} unique URLs for domain: {} (from {} total documents)", urls.size(), domain, docs.size());
+        return urls;
     }
 }

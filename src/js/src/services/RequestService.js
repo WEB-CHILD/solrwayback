@@ -23,7 +23,9 @@ export const requestService = {
   getPWID,
   getWarcHeader,
   getLinkGraph,
-  getMoreFacets
+  getMoreFacets,
+  getDomainUrls,
+  getNavigationHistory
 }
 
 async function fireSearchRequest (query, facets, options) {
@@ -347,6 +349,34 @@ async function getLinkGraph(domain, facetLimit, ingoing, dateStart, dateEnd) {
 
 async function getMoreFacets(domain, query, appliedFacets) {
   const url = `services/frontend/solr/search/facets/loadmore/?facetfield=${domain}&grouping=false&query=${encodeURIComponent(query) + appliedFacets}`
+
+  try{
+    const response = await axios.get(url)
+
+    return response.data
+
+  } catch (error){
+    return Promise.reject(error)
+  }
+
+}
+
+async function getDomainUrls(domain, maxUrls = 1000) {
+  const url = `services/frontend/tools/domainurls/?domain=${encodeURIComponent(domain)}&maxUrls=${maxUrls}`
+
+  try{
+    const response = await axios.get(url)
+
+    return response.data
+
+  } catch (error){
+    return Promise.reject(error)
+  }
+
+}
+
+async function getNavigationHistory() {
+  const url = 'services/navigationhistory/download'
 
   try{
     const response = await axios.get(url)
