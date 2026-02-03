@@ -361,6 +361,18 @@ async function getMoreFacets(domain, query, appliedFacets) {
 
 }
 
+/**
+ * Retrieve a list of URLs for a given domain from the backend tools API.
+ * The request is proxied through the frontend service under
+ * `services/frontend/tools/domainurls/` and accepts an optional
+ * `maxUrls` parameter to limit the number of returned URLs.
+ * This function is primarily used for visualizations and analysis of domain visit data in the toolbox.
+ *
+ * @param {string} domain - Domain to fetch URLs for (e.g. "example.com").
+ * @param {number} [maxUrls=1000] - Maximum number of URLs to return.
+ * @returns {Promise<Array<string>>} Promise resolving to an array of URL strings.
+ * @throws {Error} If the network request fails the promise is rejected with the error.
+ */
 async function getDomainUrls(domain, maxUrls = 1000) {
   const url = `services/frontend/tools/domainurls/?domain=${encodeURIComponent(domain)}&maxUrls=${maxUrls}`
 
@@ -375,6 +387,17 @@ async function getDomainUrls(domain, maxUrls = 1000) {
 
 }
 
+/**
+ * Download the current session's navigation history from the backend.
+ * The endpoint returns an array of navigation entries (objects) which
+ * typically contain information about archived resources visited during
+ * the user's session. Consumers often extract `archivedUrl` from the
+ * returned entries.
+ *
+ * @returns {Promise<Array<Object>>} Promise resolving to an array of
+ * navigation entry objects as returned by the server.
+ * @throws {Error} If the network request fails the promise is rejected with the error.
+ */
 async function getNavigationHistory() {
   const url = 'services/navigationhistory/download'
 
