@@ -3,7 +3,7 @@
 <%
 
 
-String orgUrl = (String) request.getAttribute("javax.servlet.error.request_uri");
+String orgUrl = (String) request.getAttribute("jakarta.servlet.error.request_uri");
 
   //http://localhost:8080/solrwayback/
   String redirectURL = PropertiesLoader.WAYBACK_BASEURL+"services/resolveLeak?url="+orgUrl;

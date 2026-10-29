@@ -2,7 +2,7 @@ package dk.kb.netarchivesuite.solrwayback.service.dto.statistics;
 
 import org.apache.solr.client.solrj.response.FieldStatsInfo;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Map;
 
 @XmlRootElement

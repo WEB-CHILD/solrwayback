@@ -3,7 +3,7 @@ package dk.kb.netarchivesuite.solrwayback.memento;
 import dk.kb.netarchivesuite.solrwayback.properties.PropertiesLoaderWeb;
 import dk.kb.netarchivesuite.solrwayback.util.DateUtils;
 
-import javax.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.MultivaluedMap;
 import java.text.ParseException;
 
 /**

@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import dk.kb.netarchivesuite.solrwayback.interfaces.ArcSource;
 import dk.kb.netarchivesuite.solrwayback.properties.PropertiesLoaderWeb;

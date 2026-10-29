@@ -17,8 +17,8 @@ import dk.kb.netarchivesuite.solrwayback.solr.NetarchiveSolrClient;
 import javax.imageio.ImageReader;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 
 public class InitializationContextListener implements ServletContextListener {
 

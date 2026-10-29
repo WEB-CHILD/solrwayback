@@ -3,7 +3,7 @@ package dk.kb.netarchivesuite.solrwayback.service.dto;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class TimestampsForPage {
