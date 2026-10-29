@@ -12,7 +12,12 @@
 * This completes the frontend side of the PDQ-hash image fields added to Solr in 5.4.3, which at the time had no GUI support for similarity search.
 * Added support for image format WebP required for calculating PDQ-Hash/pHash (com.twelvemonkeys.imageio dependency)
 * Upgraded a few backend and  many frontend third part dependencies.
+* Navigation history export now separates browsing in different tabs. Each entry has a "tab" number (1, 2, 3... in order of appearance) and, when known, a "from" field with the number of the entry for the page it was opened from, so e.g. two results opened in separate tabs from the same search both point to that search.
 * Increased temporary Tika disk swap space from 100M to 1G during indexing (config3.conf). For large payloads this will be required for Droid-light detection.
+
+### Fixed
+* Navigation history now labels each playback by how the page was actually opened. Before, the first playback after a search was always labelled "SEARCH RESULT CLICKED" and every later one "PLAYBACK LINK CLICKED", so e.g. a second result opened from the same result list was reported as a link click. The action is now decided when the page is shown, from the referrer, the browser's navigation type and link clicks recorded on the previous page. New actions in the export: "TOOLBAR LINK CLICKED", "CALENDAR LINK CLICKED", "PLAYBACK NAVIGATION", "DIRECT NAVIGATION", "BROWSER HISTORY NAVIGATION", "PAGE RELOADED" and "OTHER NAVIGATION". "PLAYBACK LINK CLICKED" now only means a recorded link click in a played back page.
+* Navigation history now records pages that could not be played back because they have never been harvested, as "PLAYBACK FAILED" with the requested URL and date. Missing resources on a page (images, stylesheets etc.) are not recorded.
 
 5.5.0
 -----
